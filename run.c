@@ -11,6 +11,10 @@ int main()
         printf("%s\n", ret[i++]);
     }
     */
-    rec_inotify("/home/musashi/CCDC");
+
+    while (1) {
+        printf("[*] Watching...\n");
+        rec_inotify("/home/musashi/CCDC");
+    }
     
 }

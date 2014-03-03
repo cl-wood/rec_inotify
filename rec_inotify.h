@@ -58,65 +58,59 @@ void get_dirs(char *arg_dir)
 
 int rec_inotify(char *dir)
 {
-    get_dirs(dir);
-//char ret[1000][100];
 
-    int length, i,j = 0;
-    int fd;
-    int wds[1000];
-    char buffer[BUF_LEN];
+  int length, i = 0;
+  int fd;
+  int wd;
+  char buffer[BUF_LEN];
 
-    fd = inotify_init();
+  fd = inotify_init();
 
-    if (fd < 0) {
-        perror("inotify_init");
-    }
+  if (fd < 0){
+    perror("inotify_init");
+  }
 
-    for (j = 0; j < numDirs; j++) {
-        wds[0] = inotify_add_watch(fd, dir, IN_MODIFY | IN_CREATE | IN_DELETE);
-        length = read(fd, buffer, BUF_LEN);  
+  wd = inotify_add_watch(fd, "/home/musashi/CCDC", IN_MODIFY | IN_CREATE | IN_DELETE);
+  length = read(fd, buffer, BUF_LEN);  
 
-    if (length < 0) {
-        perror("read");
-    }  
+  if (length < 0) {
+    perror("read");
+  }  
 
-    while (i < length) {
-        struct inotify_event *event = (struct inotify_event *)&buffer[i];
-        if (event->len){
-            if (event->mask & IN_CREATE) {
-                if (event->mask & IN_ISDIR) {
-                    printf("Directory %s created.\n", event->name);       
-                }
-                else {
-                    printf("File %s created.\n", event->name);
-                }
-            }
-
-            else if (event->mask & IN_DELETE){
-                if (event->mask & IN_ISDIR){
-                    printf("Directory %s deleted.\n", event->name);       
-                }
-                else {
-                    printf("File %s deleted.\n", event->name);
-                }
-            }
-
-            else if (event->mask & IN_MODIFY) {
-                if (event->mask & IN_ISDIR) {
-                    printf("Directory %s modified.\n", event->name);
-                }
-                else {
-                    printf("File %s modified.\n", event->name);
-                }
-            }
+  while (i < length) {
+    struct inotify_event *event = (struct inotify_event *)&buffer[ i ];
+    if (event->len) {
+      if (event->mask & IN_CREATE) {
+        if (event->mask & IN_ISDIR) {
+          printf("The directory %s was created.\n", event->name);       
         }
-        i += EVENT_SIZE + event->len;
+        else {
+          printf("The file %s was created.\n", event->name);
+        }
+      }
+      else if (event->mask & IN_DELETE) {
+        if (event->mask & IN_ISDIR) {
+          printf("The directory %s was deleted.\n", event->name);       
+        }
+        else {
+          printf("The file %s was deleted.\n", event->name);
+        }
+      }
+      else if (event->mask & IN_MODIFY) {
+        if (event->mask & IN_ISDIR) {
+          printf("The directory %s was modified.\n", event->name);
+        }
+        else {
+          printf("The file %s was modified.\n", event->name);
+        }
+      }
     }
+    i += EVENT_SIZE + event->len;
+  }
 
-    (void)inotify_rm_watch(fd, wd);
-    (void)close(fd);
+  (void)inotify_rm_watch(fd, wd);
+  (void)close(fd);
 
-    exit(0);
 } // End rec_notify()
 
 
