@@ -1,7 +1,7 @@
 // Modified from: http://www.ibm.com/developerworks/linux/library/l-ubuntu-inotify/index.html
 // Also borrowed from: http://stackoverflow.com/questions/612097/how-can-i-get-a-list-of-files-in-a-directory-using-c-or-c
 // Takes a directory and recursively finds and watches all subdirectories as well as the argument directory.
-// TODO currently assumes 100 total directories
+// TODO currently assumes 1000 total directories
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -32,6 +32,7 @@ void get_dirs(char *arg_dir)
     struct dirent *ent;
     struct stat st;
 
+
     if ( (dir = opendir(arg_dir) ) != NULL) {
         while ( (ent = readdir(dir) ) != NULL) {
 
@@ -42,10 +43,17 @@ void get_dirs(char *arg_dir)
                 (strcmp(ent->d_name, ".") != 0) && 
                 (strcmp(ent->d_name, "..") != 0) ) {
 
+                // priming read, not exactly elegant but w/e
+                if (numDirs == 0) {
+                    strcat(ret[numDirs++], arg_dir);
+                }
+
                 // Add new abs paths to discovered dirs
-                strcat(ret[numDirs], arg_dir);
-                strcat(ret[numDirs], "/");
-                strcat(ret[numDirs], ent->d_name);
+                else {
+                    strcat(ret[numDirs], arg_dir);
+                    strcat(ret[numDirs], "/");
+                    strcat(ret[numDirs], ent->d_name);
+                }
 
                 // Recursive call
                 get_dirs(ret[numDirs++]);
