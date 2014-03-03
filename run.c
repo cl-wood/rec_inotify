@@ -19,6 +19,7 @@ int main()
     //}
 
     //watch_dir_continuously("/home/musashi/CCDC");
+    //watch_dir("/home/musashi/CCDC");
     rec_inotify("/home/musashi/CCDC");
     
 }

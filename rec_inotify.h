@@ -71,7 +71,7 @@ void watch_dir(char *dir)
     perror("inotify_init");
   }
 
-  wd = inotify_add_watch(fd, "/home/musashi/CCDC", IN_MODIFY | IN_CREATE | IN_DELETE);
+  wd = inotify_add_watch(fd, dir, IN_MODIFY | IN_CREATE | IN_DELETE);
   length = read(fd, buffer, BUF_LEN);  
 
   if (length < 0) {
