@@ -2,24 +2,12 @@
 #include <pthread.h>
 #include <stdio.h>
 
-int main() 
+int main(int argc, char *argv[]) 
 {
-    /*
-    get_dirs("/home/musashi/CCDC");
-    
-    int i = 0;
-    while (ret[i][0] != '\0') {
-        printf("%s\n", ret[i++]);
-    }
-    */
+    //get_dirs(argv[1]);
+    //watch_dir_continuously(argv[1]);
+    //watch_dir(argv[1]);
 
-    //while (1) {
-    //    printf("[*] Watching...\n");
-    //    watch_dir("/home/musashi/CCDC");
-    //}
-
-    //watch_dir_continuously("/home/musashi/CCDC");
-    //watch_dir("/home/musashi/CCDC");
-    rec_inotify("/home/musashi/CCDC");
+    rec_inotify(argv[1]);
     
 }
