@@ -8,6 +8,7 @@
 #include <dirent.h>
 #include <errno.h>
 #include <unistd.h>
+#include <pthread.h>
 #include <sys/stat.h>
 #include <sys/types.h>
 #include <sys/inotify.h>
@@ -56,7 +57,7 @@ void get_dirs(char *arg_dir)
 
 } // End get_dirs()
 
-int rec_inotify(char *dir)
+void watch_dir(char *dir)
 {
 
   int length, i = 0;
@@ -66,7 +67,7 @@ int rec_inotify(char *dir)
 
   fd = inotify_init();
 
-  if (fd < 0){
+  if (fd < 0) {
     perror("inotify_init");
   }
 
@@ -108,9 +109,40 @@ int rec_inotify(char *dir)
     i += EVENT_SIZE + event->len;
   }
 
-  (void)inotify_rm_watch(fd, wd);
-  (void)close(fd);
+  inotify_rm_watch(fd, wd);
+  close(fd);
 
-} // End rec_notify()
+} // End watch_dir()
+
+void watch_dir_continuously(void* dir) {
+
+    printf("%s\n", (char *) dir); fflush(stdout);
+
+    while (1) {
+        printf("[*] Watching...\n");
+        watch_dir( (char *) dir);
+    }
+}
+
+void rec_inotify(char *dir)
+{
+    int i;
+    get_dirs(dir);
+    pthread_t threads[1000];
+    int ptRet[1000];
+
+    for (i = 0; i < numDirs; i++) {
+        ptRet[i] = pthread_create(&threads[i], 
+                                  NULL, 
+                                  (void*) watch_dir_continuously, 
+                                  (void*) &ret[i]);
+    }
+
+    // Done, cleanup
+    for (i = 0; i < numDirs; i++) {
+        pthread_join(threads[i], NULL);
+    }
+
+} // End rec_inotify()
 
 

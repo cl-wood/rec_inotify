@@ -1,4 +1,5 @@
 #include "rec_inotify.h"
+#include <pthread.h>
 #include <stdio.h>
 
 int main() 
@@ -12,9 +13,12 @@ int main()
     }
     */
 
-    while (1) {
-        printf("[*] Watching...\n");
-        rec_inotify("/home/musashi/CCDC");
-    }
+    //while (1) {
+    //    printf("[*] Watching...\n");
+    //    watch_dir("/home/musashi/CCDC");
+    //}
+
+    //watch_dir_continuously("/home/musashi/CCDC");
+    rec_inotify("/home/musashi/CCDC");
     
 }
