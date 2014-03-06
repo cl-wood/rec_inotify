@@ -91,26 +91,26 @@ void watch_dir(char *dir)
     if (event->len) {
       if (event->mask & IN_CREATE) {
         if (event->mask & IN_ISDIR) {
-          printf("The directory %s was created.\n", event->name);       
+          printf("Dir %s created in %s.\n", event->name, dir);       
         }
         else {
-          printf("The file %s was created.\n", event->name);
+          printf("File %s created in %s.\n", event->name, dir);       
         }
       }
       else if (event->mask & IN_DELETE) {
         if (event->mask & IN_ISDIR) {
-          printf("The directory %s was deleted.\n", event->name);       
+          printf("Dir %s deleted in %s.\n", event->name, dir);
         }
         else {
-          printf("The file %s was deleted.\n", event->name);
+          printf("File %s deleted in %s.\n", event->name, dir);
         }
       }
       else if (event->mask & IN_MODIFY) {
         if (event->mask & IN_ISDIR) {
-          printf("The directory %s was modified.\n", event->name);
+          printf("Dir %s modified in %s.\n", event->name, dir);
         }
         else {
-          printf("The file %s was modified.\n", event->name);
+          printf("File %s modified in %s.\n", event->name, dir);
         }
       }
     }
