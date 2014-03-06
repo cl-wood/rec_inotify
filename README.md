@@ -1,12 +1,12 @@
 rec_inotify
 ===========
 
-Watches the directory you specify, along with any sub-dirs. Recurses arbitrary deep, but I'm lazy so it only works for <= 1000 dirs.
+Can watch the directory you specify, along with any sub-dirs. Recurses arbitrary deep, but I'm lazy so it only works for <= 1000 dirs. Certain dirs, like /etc/, contain MANY sub-dirs, and so you might want to just pick some sub-dirs to watch recursively and watch /etc without recursion.
 
 Compile with: 
-    gcc -pthread run.c
+    make
 
 Run with:
-    ./a.out [dir to watch]
+    python run.py | tee inotify.log
 
 
