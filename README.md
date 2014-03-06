@@ -9,4 +9,6 @@ Compile with:
 Run with:
     python run.py | tee inotify.log
 
+Troubleshooting:
+    If you start getting bad file descriptors, pgrep for regular/recursive inotify and kill those processes
 
